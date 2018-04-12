@@ -48,15 +48,12 @@ def make_request_using_cache(url, params=None):
 
 
 def get_spotcrime_data():
-    cnt = 1
     for year in range(2010, 2018):
         for month in range(1, 13):
             for day in range(1, 32):
                 datestring = "{}-{}-{}".format(year, month, day)
                 url = 'https://spotcrime.com/mi/ann+arbor/daily-blotter/{}'.format(datestring)
                 html = make_request_using_cache(url)
-                print(cnt)
-                cnt += 1
 
 
 if __name__ == "__main__":
