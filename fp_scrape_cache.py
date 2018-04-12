@@ -28,17 +28,17 @@ def get_unique_key(url, params=None):
         return idstring
 
 
-def make_request_using_cache(url, params=None):
-    unique_ident = get_unique_key(url, params)
+def make_request_using_cache(url):
+    unique_ident = get_unique_key(url)
 
     if unique_ident in CACHE_DICTION:
-        print("Getting cached data...")
+        #print("Getting cached data...")
         return CACHE_DICTION[unique_ident]
 
     else:
         print("Making a request for new data...")
         # Make the request and cache the new data
-        resp = requests.get(url, params=params)
+        resp = requests.get(url)
         CACHE_DICTION[unique_ident] = resp.text
         dumped_json_cache = json.dumps(CACHE_DICTION)
         fw = open(CACHE_FNAME,"w")
@@ -48,13 +48,27 @@ def make_request_using_cache(url, params=None):
 
 
 def get_spotcrime_data():
-    for year in range(2010, 2018):
-        for month in range(1, 13):
-            for day in range(1, 32):
-                datestring = "{}-{}-{}".format(year, month, day)
-                url = 'https://spotcrime.com/mi/ann+arbor/daily-blotter/{}'.format(datestring)
-                html = make_request_using_cache(url)
+    url_main = 'https://spotcrime.com/mi/ann+arbor/daily/more'
+    html_main = make_request_using_cache(url_main)
+    soup_main = BeautifulSoup(html_main, 'html.parser')
+    content_main = soup_main.find(class_="main-content-column")
+    columns_main = content_main.find_all(class_="list-unstyled")
+    column_one = columns_main[0]
+    column_two = columns_main[1]
+    c1_links = column_one.find_all("a")
+    c2_links = column_two.find_all("a")
+    path_list = []
+    for elem in c1_links:
+        path_list.append(elem["href"])
+    for elem in c2_links:
+        path_list.append(elem["href"])
 
+    for path in path_list:
+        base_url = 'https://spotcrime.com'
+        page_url = base_url + path
+        html_page = make_request_using_cache(page_url)
+
+    return path_list
 
 if __name__ == "__main__":
-    get_spotcrime_data()
+    paths = get_spotcrime_data()
