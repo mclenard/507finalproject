@@ -28,9 +28,17 @@ def crime_data():
                 types.append(int(response[key]))
 
         dl, sl = model.get_selected(types, years)
+
+        try:
+            if request.form['list'] == 'yes':
+                return render_template("crimedata.html", data=dl, select=sl)
+        except:
+            return render_template("crimedata.html", data=dl, select=
+            ["list option not selected"])
+
     else:
         dl, sl = model.get_selected([], [])
-    return render_template("crimedata.html", data=dl)
+        return render_template("crimedata.html", data=dl)
 
 if __name__ == '__main__':
     model.create_crime_list()

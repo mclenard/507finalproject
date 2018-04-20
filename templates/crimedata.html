@@ -25,6 +25,8 @@
     <input type="checkbox" name="type8" value="8"/> Robbery
     <input type="checkbox" name="type9" value="9"/> Arson <br/>
     <br/>
+    <input type="checkbox" name="list" value="yes"/> List selected crimes
+    <br/>
     <input type="submit" name="update" value="Update"/>
     <br/>
     <br/>
@@ -66,3 +68,12 @@
     </tr>
 {% endfor %}
 </table>
+
+<br/>
+<br/>
+<h3> List of selected crimes: </h3>
+<ul>
+{% for s in select %}
+<li>{{s}}</li>
+{% endfor %}
+</ul>
