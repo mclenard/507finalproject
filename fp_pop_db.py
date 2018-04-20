@@ -89,56 +89,57 @@ def retrieve_spotcrime_data():
                 data_list.append((cat, date, time, address, desc, code))
     return data_list
 
+if __name__ == '__main__':
+    init_db()
 
-init_db()
-data = retrieve_spotcrime_data()
+    data = retrieve_spotcrime_data()
 
-try:
-    conn = sqlite3.connect("CrimespotData.db")
-except Error as e:
-    print(e)
+    try:
+        conn = sqlite3.connect("CrimespotData.db")
+    except Error as e:
+        print(e)
 
-cur = conn.cursor()
+    cur = conn.cursor()
 
-for tup in data:
-    insertion = (None, None, tup[1], tup[2], tup[3], tup[4], tup[5])
-    statement = 'INSERT INTO "Description" '
-    statement += 'VALUES (?, ?, ?, ?, ?, ?, ?)'
-    cur.execute(statement, insertion)
+    for tup in data:
+        insertion = (None, None, tup[1], tup[2], tup[3], tup[4], tup[5])
+        statement = 'INSERT INTO "Description" '
+        statement += 'VALUES (?, ?, ?, ?, ?, ?, ?)'
+        cur.execute(statement, insertion)
 
-conn.commit()
+    conn.commit()
 
-crime_set = set()
-for tup in data:
-    crime_set.add(tup[0])
+    crime_set = set()
+    for tup in data:
+        crime_set.add(tup[0])
 
-cnt = 1
-type_dict = {}
-for crime_type in crime_set:
-    insertion = (None, crime_type)
-    statement = 'INSERT INTO "Category" '
-    statement += 'VALUES (?, ?)'
-    type_dict[crime_type] = cnt
-    cnt += 1
-    cur.execute(statement, insertion)
+    cnt = 1
+    type_dict = {}
+    for crime_type in crime_set:
+        insertion = (None, crime_type)
+        statement = 'INSERT INTO "Category" '
+        statement += 'VALUES (?, ?)'
+        type_dict[crime_type] = cnt
+        cnt += 1
+        cur.execute(statement, insertion)
 
-conn.commit()
+    conn.commit()
 
-type_list = [None]
-for tup in data:
-    categ = tup[0]
-    if categ in type_dict:
-        type_list.append(type_dict[categ])
+    type_list = [None]
+    for tup in data:
+        categ = tup[0]
+        if categ in type_dict:
+            type_list.append(type_dict[categ])
 
-for id in range(1, 17836):
-    statement = '''
-    UPDATE Description
-    SET CategoryId = ?
-      WHERE Id = ?
-    '''
-    params = (type_list[id], id, )
-    cur.execute(statement, params)
+    for id in range(1, 17836):
+        statement = '''
+        UPDATE Description
+        SET CategoryId = ?
+          WHERE Id = ?
+        '''
+        params = (type_list[id], id, )
+        cur.execute(statement, params)
 
-conn.commit()
+    conn.commit()
 
-conn.close()
+    conn.close()
