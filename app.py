@@ -11,14 +11,26 @@ app = Flask(__name__)
 def index():
     return '''
         <h1>Ann Arbor Crime Data</h1>
-        <ul>
-            <li><a href="/crimedata"> Go to Crime Data page </a></li>
-        </ul>
+        <p></p>
+        <h2><a href="/crimedata"> Go to Crime Data page </a></h2>
         '''
 
-@app.route("/crimedata")
+@app.route("/crimedata", methods=['GET', 'POST'])
 def crime_data():
-    return None
+    if request.method == 'POST':
+        response = request.form
+        types = []
+        years = []
+        for key in response:
+            if "year" in key:
+                years.append(int(response[key]))
+            if "type" in key:
+                types.append(int(response[key]))
+
+        dl, sl = model.get_selected(types, years)
+    else:
+        dl, sl = model.get_selected([], [])
+    return render_template("crimedata.html", data=dl)
 
 if __name__ == '__main__':
     model.create_crime_list()

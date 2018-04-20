@@ -13,6 +13,7 @@ class Crime():
         self.catid = catid
         self.category = category
         self.date = date
+        self.month = int(date[:2])
         self.year = int(date[-2:])
         self.time = time
         self.address = address
@@ -48,4 +49,35 @@ def create_crime_list():
 
     return None
 
-create_crime_list()
+def get_selected(types=[1,2,3,4,5,6,7,8,9], years=[10,11,12,13,14,15,16,17]):
+    global crime_list
+    data_list = []
+    narrowed_crimes = []
+    selected_list = []
+
+    for id in types:
+        for crime in crime_list:
+            if id == crime.catid:
+                narrowed_crimes.append(crime)
+                selected_list.append(crime.__str__())
+
+    for year in years:
+        yearlist = []
+        yr = '20' + str(year)
+        temp_list = [yr]
+
+        for month in range(1,13):
+            monthlist = []
+
+            for crime in narrowed_crimes:
+                if crime.month == month and crime.year == year:
+                    yearlist.append(crime)
+                    monthlist.append(crime)
+
+            monthcount = len(monthlist)
+            temp_list.append(monthcount)
+
+        temp_list.insert(1, len(yearlist))
+        data_list.append(temp_list)
+
+    return data_list, selected_list

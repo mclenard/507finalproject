@@ -1,0 +1,68 @@
+<link rel="stylesheet" href="/static/style.css">
+
+<h1> Ann Arbor Crime Data </h1>
+<h2> From Oct. 2010 to Apr. 19th, 2017 </h2>
+
+<form action="/crimedata" method="POST">
+    See crimes from years:<br/>
+    <input type="checkbox" name="year10" value="10"/> 2010
+    <input type="checkbox" name="year11" value="11"/> 2011
+    <input type="checkbox" name="year12" value="12"/> 2012
+    <input type="checkbox" name="year13" value="13"/> 2013
+    <input type="checkbox" name="year14" value="14"/> 2014
+    <input type="checkbox" name="year15" value="15"/> 2015
+    <input type="checkbox" name="year16" value="16"/> 2016
+    <input type="checkbox" name="year17" value="17"/> 2017 <br/>
+    <br/>
+    See following crime types:<br/>
+    <input type="checkbox" name="type1" value="1"/> Arrest
+    <input type="checkbox" name="type2" value="2"/> Burglary
+    <input type="checkbox" name="type3" value="3"/> Shooting
+    <input type="checkbox" name="type4" value="4"/> Vandalism
+    <input type="checkbox" name="type5" value="5"/> Assault
+    <input type="checkbox" name="type6" value="6"/> Other
+    <input type="checkbox" name="type7" value="7"/> Theft
+    <input type="checkbox" name="type8" value="8"/> Robbery
+    <input type="checkbox" name="type9" value="9"/> Arson <br/>
+    <br/>
+    <input type="submit" name="update" value="Update"/>
+    <br/>
+    <br/>
+</form>
+
+<table border=1>
+    <tr>
+        <th>Year</th>
+        <th>Total</th>
+        <th>January</th>
+        <th>February</th>
+        <th>March</th>
+        <th>April</th>
+        <th>May</th>
+        <th>June</th>
+        <th>July</th>
+        <th>August</th>
+        <th>September</th>
+        <th>October</th>
+        <th>November</th>
+        <th>December</th>
+    </tr>
+{% for d in data %}
+    <tr>
+        <td>{{d[0]}}</td>
+        <td>{{d[1]}}</td>
+        <td>{{d[2]}}</td>
+        <td>{{d[3]}}</td>
+        <td>{{d[4]}}</td>
+        <td>{{d[5]}}</td>
+        <td>{{d[6]}}</td>
+        <td>{{d[7]}}</td>
+        <td>{{d[8]}}</td>
+        <td>{{d[9]}}</td>
+        <td>{{d[10]}}</td>
+        <td>{{d[11]}}</td>
+        <td>{{d[12]}}</td>
+        <td>{{d[13]}}</td>
+    </tr>
+{% endfor %}
+</table>
